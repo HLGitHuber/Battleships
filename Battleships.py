@@ -3,7 +3,6 @@
 def placement_phase(player):
     pass
 
-<<<<<<< HEAD
 def get_empty_board(size):
     return  [['O' for _ in range(size)] for _ in range(size)]
 
@@ -16,14 +15,6 @@ def display_board(game_board):
         print(f'{alphabet[x]} {" ".join(game_board[x])}')
 
 # is ship placement valid
-=======
-def get_empty_board():
-    pass
-
-def display_board():
-    pass
-
->>>>>>> 863ee4385377f15ba8a4c24c5c618ea6d0126ecf
 def valid_input():
     pass
 
@@ -38,18 +29,6 @@ def what_ships():
 def ship_placement():
     pass
 
-<<<<<<< HEAD
-def shooting_phase():
-    pass
-
-def ask_for_shot(): ##
-    pass
-
-def is_shot_valid(): ##
-    pass
-
-def hit_or_miss(): ##
-=======
 
 def shooting_phase():
     pass
@@ -61,13 +40,11 @@ def is_shot_valid():
     pass
 
 def hit_or_miss():
->>>>>>> 863ee4385377f15ba8a4c24c5c618ea6d0126ecf
     pass
 
 def is_ship_sunk():
     pass
 
-<<<<<<< HEAD
 def win_condition(player1_board, player2_board):
     if is_all_ship_sunk(player1_board):
         return player1_board
@@ -96,20 +73,3 @@ def main_logic():
     pass
 
 print(win_condition(player1_board, player2_board))
-=======
-def win_condition():
-    pass
-
-player1_board = get_empty_board()
-player2_board = get_empty_board()
-player1_shoots = get_empty_board()
-player2_shoots = get_empty_board()
-
-
-
-
-
-
-def main_logic():
-    pass
->>>>>>> 863ee4385377f15ba8a4c24c5c618ea6d0126ecf
