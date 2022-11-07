@@ -45,11 +45,9 @@ def hit_or_miss():
 def is_ship_sunk():
     pass
 
-def win_condition(player1_board, player2_board):
-    if is_all_ship_sunk(player1_board):
-        return player1_board
-    elif is_all_ship_sunk(player2_board):
-        return player2_board
+def win_condition(player_board):
+    if is_all_ship_sunk(player_board):
+        return True
     else:
         return False
 
@@ -69,7 +67,13 @@ player1_shoots = get_empty_board(5)
 player2_shoots = get_empty_board(5)
 
 
+
+
 def main_logic():
     pass
 
-print(win_condition(player1_board, player2_board))
+# player1_board[0][0] = 'X'
+
+# print(player1_board)
+
+# print(win_condition(player1_board))
