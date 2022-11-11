@@ -55,9 +55,15 @@ def get_valid_input(player_coordinates, player_board, ship_size):
         if check_if_position_empty(player_coordinates, player_board) == True and is_valid_input(player_coordinates, ship_size) == True:
             return get_player_coordinates_format(player_coordinates)
 
-def ship_proximity():
-    #horizontal or ventical, regardless of corners
-    pass
+def check_if_adjecent_empty(player_board, ship_location):
+    rows = int(ship_location[0])
+    columns = int(ship_location[1])
+    if player_board[rows][columns-1] == 'O' or player_board[rows][columns-1] == IndexError: #sprawdza w lewo
+        if player_board[rows][columns+1] == 'O' or player_board[rows][columns+1] == IndexError: #sprawdza w prawo
+            if player_board[rows+1][columns] == 'O' or player_board[rows+1][columns] == IndexError: #sprawdza na górze
+                if player_board[rows-1][columns] == 'O' or player_board[rows-1][columns] == IndexError: #sprawdza na dole
+                    return True
+    return False
 
 def get_ships_dict(ships_dict):
     player_ships = []
