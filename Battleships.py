@@ -3,7 +3,7 @@ def get_empty_board(board_size):
 
 
 def ask_for_input(ship_size):
-    coordinates = input("Please provide position in format ie. A1, size of current ship is {ship_size}: ")
+    coordinates = input(f"Please provide position in format ie. A1, size of current ship is {ship_size}: ")
     return coordinates
 
 
@@ -25,17 +25,21 @@ def is_valid_input(player_input, size):
             columns = int(coordinates[1])
         except ValueError:
             columns = None
-        if rows.upper()  in ['A','B','C','D', 'E', 'F', 'G','H', 'I', 'J'] and columns in range(1,size):
+        if rows.upper()  in ['A','B','C','D', 'E', 'F', 'G','H', 'I', 'J'] and columns in range(1,size+1):
             return True
     else:
         return False
 
 
 def check_if_position_empty(player_coordinates, player_board):
-    if player_board[int(player_coordinates[0])][int(player_coordinates[1])] == IndexError or player_board[int(player_coordinates[0])][int(player_coordinates[1])] != 'O':
+    try:
+        if player_board[int(player_coordinates[0])][int(player_coordinates[1])] == 'O':
+            return True
+        else:
+            return False
+    except IndexError:
         return False
-    elif player_board[int(player_coordinates[0])][int(player_coordinates[1])] == 'O':
-        return True
+
         
 
 def get_player_coordinates_format(player_coordinate):
@@ -61,17 +65,20 @@ def get_valid_input(player_coordinates, player_board, ship_size):
 board_player1 = get_empty_board(5)
 
 # player1_ships = [['00'], ['44'], ['22','23'], ['30', '40']]
-ships_dict = {1: 1, 2:0, 3:0, 4:0}
+
 
 def check_if_adjecent_empty(player_board, ship_location):
     rows = int(ship_location[0])
     columns = int(ship_location[1])
-    if player_board[rows][columns-1] == 'O' or player_board[rows][columns-1] == IndexError: #sprawdza w lewo
-        if player_board[rows][columns+1] == 'O' or player_board[rows][columns+1] == IndexError: #sprawdza w prawo
-            if player_board[rows+1][columns] == 'O' or player_board[rows+1][columns] == IndexError: #sprawdza na górze
-                if player_board[rows-1][columns] == 'O' or player_board[rows-1][columns] == IndexError: #sprawdza na dole
-                    return True
-    return False
+    try:
+        if player_board[rows][columns-1] == 'O': #sprawdza w lewo
+            if player_board[rows][columns+1] == 'O': #sprawdza w prawo
+                if player_board[rows+1][columns] == 'O': #sprawdza na górze
+                    if player_board[rows-1][columns] == 'O': #sprawdza na dole
+                        return True
+        return False
+    except IndexError:
+        return True
 
 def get_direction():
     direction = input('Please make a choice, if ship should go to the right , or downwards from your position (type R or D and press Enter): ')
@@ -88,6 +95,9 @@ def get_ship_locations(player_board, ships_dict, board_size):
                 ship_location = ask_for_input(ship_size)
                 if is_valid_input(ship_location, board_size) == True:
                     coordinates = get_player_coordinates_format(ship_location) #changes player input like A1 to coordinates like '00'
-                    if check_if_position_empty(ship_location, player_board) == True and check_if_adjecent_empty(player_board, ship_location)==True:
-                        player_board.append(coordinates)
+                    if check_if_position_empty(coordinates, player_board) == True and check_if_adjecent_empty(player_board, coordinates)==True:
+                        player_board[int(coordinates[0])][int(coordinates[1])] = 'X'
+                        # player_ships.append(coordinates)
                         ships_dict[1] = ships_dict[1]-1
+                else:
+                    print('This seems to be a wrong coordinate')
