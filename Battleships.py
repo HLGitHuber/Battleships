@@ -89,6 +89,7 @@ def get_ship_locations(player_board, ships_dict, board_size):
 
 
 BOARD_SIZE = 5
+MAX_TURNS = 50
 
 # board_player1 = [['O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O']]
 board_player1 = get_empty_board(BOARD_SIZE)
@@ -98,7 +99,17 @@ shooting_board_player2 = get_empty_board(BOARD_SIZE)
 
 player1_ships = [['00'], ['44'], ['22','23'], ['30', '40', '20']]
 
+player2_ships = [['00'], ['44'], ['22','23'], ['30', '40', '20']]
+
 ships_dict = {1:1, 2:0, 3:0, 4:0}
+
+def win_condition(player_board):
+    board_size = len(player_board)
+    for row in range(board_size):
+        for col in range(board_size):
+            if player_board[row][col] == 'X':
+                return False
+    return True
 
 def ask_for_shot():
     global shot
@@ -106,13 +117,30 @@ def ask_for_shot():
     return shot
 
 def shooting_phase():
-    display_board(board_player1)
-    make_a_shot(player1_ships, board_player1)
-    display_board(board_player1)
-    make_a_shot(player1_ships, board_player1)
-    display_board(board_player1)
-
-def make_a_shot(player_ships, player_board):
+    turn_count = 1
+    while turn_count < MAX_TURNS:
+        print("Player 1 shooting board:")
+        display_board(shooting_board_player1)
+        print("Player 2 shooting board")
+        display_board(shooting_board_player2)
+        if turn_count % 2 == 1:
+            make_a_shot(player2_ships, board_player2, shooting_board_player1)
+            if win_condition(board_player2):
+                print("Player 1 wins!")
+                quit()
+            turn_count += 1
+        elif turn_count % 2 == 0:
+            make_a_shot(player1_ships, board_player1, shooting_board_player2)
+            if win_condition(board_player1):
+                print("Player 2 wins!")
+                quit()
+            turn_count+= 1
+        
+    else:
+        print("No more turns, it's a draw!")
+        quit()
+    
+def make_a_shot(player_ships, player_board, player_shooting_board):
     x = True
     while x:
         shot = ask_for_shot()
@@ -121,19 +149,25 @@ def make_a_shot(player_ships, player_board):
             for ship in range(len(player_ships)):
                 if shot in player_ships[ship]:
                     player_board[int(shot[0])][int(shot[1])] = 'H'
+                    player_shooting_board[int(shot[0])][int(shot[1])] = 'H'
                     player_ships[ship].remove(shot)
                     if len(player_ships[ship]) == 0:
                         player_board[int(shot[0])][int(shot[1])] = 'S'
+                        player_shooting_board[int(shot[0])][int(shot[1])] = 'S'
                         rows = int(shot[0])
                         columns = int(shot[1])
                         if player_board[rows][columns-1] == 'H': #sprawdza w lewo
                             player_board[rows][columns-1] = 'S'
+                            player_shooting_board[rows][columns-1] = 'S'
                         elif player_board[rows][columns+1] == 'H': #sprawdza w prawo
                             player_board[rows][columns+1] = 'S'
+                            player_shooting_board[rows][columns+1] = 'S'
                         elif player_board[rows+1][columns] == 'H': #sprawdza na górze
                             player_board[rows+1][columns] = 'S'
+                            player_shooting_board[rows+1][columns] = 'S'
                         elif player_board[rows-1][columns] == 'H': #sprawdza na dole
                             player_board[rows-1][columns] = 'S'
+                            player_shooting_board[rows-1][columns] = 'S'
 
                         print("You've sunk a ship!")
                         return
@@ -141,6 +175,7 @@ def make_a_shot(player_ships, player_board):
                     return
                 
             player_board[int(shot[0])][int(shot[1])] = 'M'
+            player_shooting_board[int(shot[0])][int(shot[1])] = 'M'
             print("You've missed!")
             x = False
             return 
