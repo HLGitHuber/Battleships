@@ -143,33 +143,42 @@ def get_ship_locations(player_board, ships_dict, board_size, player_ships):
             while ships_dict[ship_size]>0:
                 display_board(player_board)
                 ship_location = ask_for_input(ship_size)
-                if is_valid_input(ship_location, board_size) == True:
+                if is_valid_input(ship_location, board_size) == False:
+                    print('This seems to be wrong coordinate/wrong input/outside board')
+                elif is_valid_input(ship_location, board_size) == True:
                     coordinates = get_player_coordinates_format(ship_location) #changes player input like A1 to coordinates like '00'
                     if check_if_position_empty(coordinates, player_board) == True and check_if_adjecent_empty(player_board, coordinates)==True:
                         place_ship_size_1(player_board, coordinates)
                         player_ships.append([coordinates])
                         ships_dict[1] = ships_dict[1]-1
-                    else:
-                        print('This seems to be a wrong coordinate')
+                        display_board(player_board)
+                    elif check_if_position_empty(coordinates, player_board) == False:
+                        print('This position seems to be already occupied')
+                    elif check_if_adjecent_empty(player_board, coordinates) == False:
+                        print('This position seems to be too close to other ship')                
         if ship_size == 2:
             while ships_dict[ship_size]>0:
                 display_board(player_board)
                 ship_initial_location = ask_for_input(ship_size)
                 if is_valid_input(ship_initial_location, board_size) == True:
                     coordinates = get_player_coordinates_format(ship_initial_location)
-                    direction = get_direction()
-                    if check_if_position_empty(coordinates, player_board) == True and check_if_adjecent_empty(player_board, coordinates)==True:
+                    if check_if_position_empty(coordinates, player_board) == False:
+                        print('This position seems to be already occupied')
+                    elif check_if_adjecent_empty(player_board, coordinates) == False:
+                        print('This position seems to be too close to other ship')
+                    elif check_if_position_empty(coordinates, player_board) == True and check_if_adjecent_empty(player_board, coordinates)==True:
+                        direction = get_direction()
                         if direction == 'R':
                             coordinates_2 = move_coordinates_right(coordinates)
-                            if check_if_adjecent_empty(player_board, coordinates_2)==True and check_if_position_empty(coordinates_2, player_board) == True:
-                                place_ship_size_2(player_board, coordinates, coordinates_2)
-                                ships_dict[2] = ships_dict[2]-1
-                                player_ships.append([coordinates, coordinates_2])
                         if direction == 'D':
                             coordinates_2 = move_coordinates_down(coordinates)
-                            if check_if_adjecent_empty(player_board, coordinates_2)==True and check_if_position_empty(coordinates_2, player_board) == True:
-                                place_ship_size_2(player_board, coordinates, coordinates_2)
-                                ships_dict[2] = ships_dict[2]-1
-                                player_ships.append([coordinates, coordinates_2])
-                    else:
-                        print('This seems to be a wrong coordinate')     
+                        if check_if_position_empty(coordinates_2, player_board) == False:
+                            print('This direction seems to be outside of board')
+                        elif check_if_adjecent_empty(player_board, coordinates_2) == False:
+                            print('This direction would cause ship to be too close to other ship')
+                        elif check_if_adjecent_empty(player_board, coordinates_2)==True and check_if_position_empty(coordinates_2, player_board) == True:
+                            place_ship_size_2(player_board, coordinates, coordinates_2)
+                            ships_dict[2] = ships_dict[2]-1
+                            display_board(player_board)
+                            player_ships.append([coordinates, coordinates_2])
+
