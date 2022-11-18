@@ -1,3 +1,5 @@
+
+# https://github.com/HLGitHuber/Battleships/blob/Adam/Battleships.py
 def get_empty_board(board_size):
     return  [['O' for _ in range(board_size)] for _ in range(board_size)]
 def ask_for_input(ship_size):
@@ -294,33 +296,30 @@ def check_and_sink(player_board, coordinates):
     complete_sink_on_top(player_board, coordinates)
 
 
-def shot_sequence(game_board, game_board_shots): #for example if its player 1, it will be player2_board, player1_shots and coordinates from player1
-    coordinates = shot_coordinates(len(game_board))
+def shot_sequence(target_board, game_board_shots): #for example if its player 1, it will be player2_board, player1_shots and coordinates from player1, game board is target board
+    coordinates = shot_coordinates(len(target_board))
     rows = int(coordinates[0])
     columns = int(coordinates[1])
-    if game_board[rows][columns] == 'O':
+    if target_board[rows][columns] == 'O':
         game_board_shots[rows][columns] = 'M'
         print('You missed')
-    elif game_board[rows][columns] == 'X':
-        if check_for_adjacency_ship_bottom(game_board, coordinates) == False:
-            game_board_shots[rows][columns] == 'S'
-            game_board[rows][columns] == 'S'
+    elif target_board[rows][columns] == 'X':
+        if check_bigger_ship_hit(target_board, coordinates) == False:
+            game_board_shots[rows][columns] = 'S'
+            target_board[rows][columns] = 'S'
             print('Ship sunk')
-        elif check_bigger_ship_hit(game_board, coordinates) == True:
-            game_board_shots[rows][columns] == 'H'
-            game_board[rows][columns] == 'H'
+        elif check_bigger_ship_hit(target_board, coordinates) == True:
+            game_board_shots[rows][columns] = 'H'
+            target_board[rows][columns] = 'H'
             print('Ship hit')
             check_and_sink(game_board_shots, coordinates)
 
-
 def win_condition(player_board):
-    board_size = len(player_board)
-    for row in range(board_size):
-        for col in range(board_size):
-            if player_board[row][col] == 'X':
-                return False
-
-
+    win_board = [item for sublist in player_board for item in sublist]
+    if 'X' in win_board:
+        return False
+    else:
+        return True
 
 def game_main_logic():
     board_size = 5
@@ -328,22 +327,23 @@ def game_main_logic():
     player2_board = get_empty_board(board_size)
     player1_shots = get_empty_board(board_size)
     player2_shots = get_empty_board(board_size)
-    ships_dict = {1: 1, 2: 0, 3: 0, 4:0}
-    get_ship_locations(player1_board, ships_dict)
+    p1_ships_dict = {1: 1, 2: 1}
+    p2_ships_dict = {1: 1, 2: 1}
+    get_ship_locations(player1_board, p1_ships_dict)
     display_board(player1_board)
     end_of_ship_deployment()
-    ships_dict = {1: 1, 2: 0, 3: 0, 4:0}
-    get_ship_locations(player2_board, ships_dict)
+    get_ship_locations(player2_board, p2_ships_dict)
     display_board(player2_board)
     end_of_ship_deployment()
     turn_count = 1
-    while win_condition(player1_board) == False and win_condition(player2_board) == False:
+    turn_limit = 50
+    while turn_count < turn_limit:
         if turn_count % 2 == 1:
             turn_count +=1
             print("It is player 1 shot")
             display_board_next_to_another(player1_shots, player2_shots)
             shot_sequence(player2_board, player1_shots)
-            if win_condition(player2_board) == None:
+            if win_condition(player2_board) == True:
                 print('Player 1 won, gg')
                 break
         elif turn_count % 2 == 0:
@@ -351,7 +351,8 @@ def game_main_logic():
             print("It is player 2 shot")
             display_board_next_to_another(player1_shots, player2_shots)
             shot_sequence(player1_board, player2_shots)
-            if win_condition(player2_board) == None:
+            if win_condition(player1_board) == True:
                 print('Player 2 won, gg')
                 break
 
+game_main_logic()
