@@ -16,6 +16,7 @@ def display_board(game_board):
         print(f'{alphabet[x]} {" ".join(game_board[x])}')
 
 def is_valid_input(player_input, size):
+    alphabet = 'ABCDEFGHIJ'
     if len(player_input) ==2:
         rows = player_input[0]
         columns = player_input[1]
@@ -25,8 +26,10 @@ def is_valid_input(player_input, size):
             columns = int(coordinates[1])
         except ValueError:
             columns = None
-        if rows.upper()  in ['A','B','C','D', 'E', 'F', 'G','H', 'I', 'J'] and columns in range(1,size+1):
+        if rows.upper()  in [*alphabet[0:size]] and columns in range(1,size+1):
             return True
+        else:
+            return False
     else:
         return False
 
