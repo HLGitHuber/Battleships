@@ -339,7 +339,7 @@ def game_main_logic():
     turn_count = 1
     while win_condition(player1_board) == False and win_condition(player2_board) == False:
         if turn_count % 2 == 1:
-            turn_count =+1
+            turn_count +=1
             print("It is player 1 shot")
             display_board_next_to_another(player1_shots, player2_shots)
             shot_sequence(player2_board, player1_shots)
@@ -347,7 +347,7 @@ def game_main_logic():
                 print('Player 1 won, gg')
                 break
         elif turn_count % 2 == 0:
-            turn_count =+1
+            turn_count +=1
             print("It is player 2 shot")
             display_board_next_to_another(player1_shots, player2_shots)
             shot_sequence(player1_board, player2_shots)
