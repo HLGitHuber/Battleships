@@ -249,51 +249,6 @@ def check_bigger_ship_hit(player_board, coordinates):
         return True
     else:
         return False
-def complete_sink_on_left(player_board, coordinates):
-    rows = int(coordinates[0])
-    columns = int(coordinates[1])
-    try:
-        if player_board[rows][columns-1] == 'H':
-            player_board[rows][columns-1] ='S'
-            player_board[rows][columns] = 'S'
-            print('You sunk a ship')
-    except IndexError:
-        pass
-def complete_sink_on_right(player_board, coordinates):
-    rows = int(coordinates[0])
-    columns = int(coordinates[1])
-    try:
-        if player_board[rows][columns+1] == 'X':
-            player_board[rows][columns+1] ='S'
-            player_board[rows][columns] = 'S'
-            print('You sunk a ship')
-    except IndexError:
-        pass
-def complete_sink_on_top(player_board, coordinates):
-    rows = int(coordinates[0])
-    columns = int(coordinates[1])
-    try:
-        if player_board[rows+1][columns] == 'X':
-            player_board[rows+1][columns] ='S'
-            player_board[rows][columns] = 'S'
-            print('You sunk a ship')
-    except IndexError:
-        pass
-def complete_sink_on_bottom(player_board, coordinates):
-    rows = int(coordinates[0])
-    columns = int(coordinates[1])
-    try:
-        if player_board[rows-1][columns] == 'X':
-            player_board[rows-1][columns] ='S'
-            player_board[rows][columns] = 'S'
-            print('You sunk a ship')
-    except IndexError:
-        pass
-def check_and_sink(player_board, coordinates):
-    complete_sink_on_left(player_board, coordinates)
-    complete_sink_on_right(player_board, coordinates)
-    complete_sink_on_top(player_board, coordinates)
-    complete_sink_on_top(player_board, coordinates)
 
 
 def shot_sequence(target_board, game_board_shots): #for example if its player 1, it will be player2_board, player1_shots and coordinates from player1, game board is target board
@@ -307,24 +262,32 @@ def shot_sequence(target_board, game_board_shots): #for example if its player 1,
         if check_bigger_ship_hit(target_board, coordinates) == False:
             game_board_shots[rows][columns] = 'S'
             target_board[rows][columns] = 'S'
-            if game_board_shots[rows][columns-1] == 'H': #sprawdza w lewo
-                game_board_shots[rows][columns-1] = 'S'
-                target_board[rows][columns-1] = 'S'
-            elif game_board_shots[rows][columns+1] == 'H': #sprawdza w prawo
-                game_board_shots[rows][columns+1] = 'S'
-                target_board[rows][columns+1] = 'S'
-            elif game_board_shots[rows+1][columns] == 'H': #sprawdza na górze
-                game_board_shots[rows+1][columns] = 'S'
-                target_board[rows+1][columns] = 'S'
-            elif game_board_shots[rows-1][columns] == 'H': #sprawdza na dole
-                game_board_shots[rows-1][columns] = 'S'
-                target_board[rows-1][columns] = 'S'
+            
             print('Ship sunk')
         elif check_bigger_ship_hit(target_board, coordinates) == True:
             game_board_shots[rows][columns] = 'H'
             target_board[rows][columns] = 'H'
             print('Ship hit')
-            check_and_sink(game_board_shots, coordinates)
+        try:
+            if game_board_shots[rows][columns-1] == 'H': #sprawdza w lewo
+                    game_board_shots[rows][columns-1] = 'S'
+                    target_board[rows][columns-1] = 'S'
+                    print('Ship sunk')
+            if game_board_shots[rows][columns+1] == 'H': #sprawdza w prawo
+                game_board_shots[rows][columns+1] = 'S'
+                target_board[rows][columns+1] = 'S'
+                print('Ship sunk')
+            if game_board_shots[rows+1][columns] == 'H': #sprawdza na górze
+                game_board_shots[rows+1][columns] = 'S'
+                target_board[rows+1][columns] = 'S'
+                print('Ship sunk')
+            if game_board_shots[rows-1][columns] == 'H': #sprawdza na dole
+                game_board_shots[rows-1][columns] = 'S'
+                target_board[rows-1][columns] = 'S'
+                print('Ship sunk')
+        except:
+            pass
+            
 
 def win_condition(player_board):
     win_board = [item for sublist in player_board for item in sublist]
