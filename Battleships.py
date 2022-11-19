@@ -307,6 +307,18 @@ def shot_sequence(target_board, game_board_shots): #for example if its player 1,
         if check_bigger_ship_hit(target_board, coordinates) == False:
             game_board_shots[rows][columns] = 'S'
             target_board[rows][columns] = 'S'
+            if game_board_shots[rows][columns-1] == 'H': #sprawdza w lewo
+                game_board_shots[rows][columns-1] = 'S'
+                target_board[rows][columns-1] = 'S'
+            elif game_board_shots[rows][columns+1] == 'H': #sprawdza w prawo
+                game_board_shots[rows][columns+1] = 'S'
+                target_board[rows][columns+1] = 'S'
+            elif game_board_shots[rows+1][columns] == 'H': #sprawdza na górze
+                game_board_shots[rows+1][columns] = 'S'
+                target_board[rows+1][columns] = 'S'
+            elif game_board_shots[rows-1][columns] == 'H': #sprawdza na dole
+                game_board_shots[rows-1][columns] = 'S'
+                target_board[rows-1][columns] = 'S'
             print('Ship sunk')
         elif check_bigger_ship_hit(target_board, coordinates) == True:
             game_board_shots[rows][columns] = 'H'
