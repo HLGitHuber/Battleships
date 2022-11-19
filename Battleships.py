@@ -296,14 +296,34 @@ def win_condition(player_board):
     else:
         return True
 
+def get_board_size():
+    while True:
+         board_size = input("Please provide board size (between 5 and 10): ")
+         if board_size in ['5', '6', '7', '8', '9', '10']:
+            return int(board_size)
+
+def get_ships_dict(board_size):
+    if board_size == 5:
+        return {1: 3, 2: 1}
+    elif board_size == 6:
+        return {1: 3, 2: 2}
+    elif board_size == 7:
+        return {1: 4, 2: 3}
+    elif board_size == 8:
+        return {1: 5, 2: 4}
+    elif board_size == 9:
+        return {1: 6, 2: 4}
+    elif board_size == 10:
+        return {1: 6, 2: 5}
+    
 def game_main_logic():
-    board_size = 5
+    board_size = get_board_size() 
     player1_board = get_empty_board(board_size)
     player2_board = get_empty_board(board_size)
     player1_shots = get_empty_board(board_size)
     player2_shots = get_empty_board(board_size)
-    p1_ships_dict = {1: 1, 2: 1}
-    p2_ships_dict = {1: 1, 2: 1}
+    p1_ships_dict = get_ships_dict(board_size)
+    p2_ships_dict = get_ships_dict(board_size)
     get_ship_locations(player1_board, p1_ships_dict)
     display_board(player1_board)
     end_of_ship_deployment()
